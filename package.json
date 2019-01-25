@@ -1,7 +1,7 @@
 {
-  "name": "base-react-component",
+  "name": "merge-focus",
   "version": "0.0.1",
-  "description": "Base project for creating distributable React components",
+  "description": "A React component that merges the onFocus and onBlur events of a set of inputs.",
   "main": "lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/penx/base-react-component.git"
+    "url": "git+https://github.com/penx/merge-focus.git"
   },
   "keywords": [
     "Base",
@@ -28,13 +28,14 @@
   "author": "Alasdair McLeay",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/penx/base-react-component/issues"
+    "url": "https://github.com/penx/merge-focus/issues"
   },
-  "homepage": "https://github.com/penx/base-react-component#readme",
+  "homepage": "https://github.com/penx/merge-focus#readme",
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
@@ -52,13 +53,21 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.6.0",
+    "eslint-config-react-app": "^3.0.6",
+    "eslint-plugin-flowtype": "^3.2.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.11.1",
     "jest": "^23.6.0",
+    "jest-dom": "^3.0.0",
+    "prettier": "^1.16.1",
     "react": "^16.6.0",
     "react-dom": "^16.6.3",
-    "rimraf": "^2.6.2"
+    "react-testing-library": "^5.4.4",
+    "rimraf": "^2.6.2",
+    "user-event": "^1.4.4"
   },
   "peerDependencies": {
     "react": ">=15"
