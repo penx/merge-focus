@@ -1,10 +1,82 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React from "react";
+// import ReactDOM from "react-dom";
+import { render, cleanup } from "react-testing-library";
+import userEvent from "user-event";
+import "jest-dom/extend-expect";
 
-import Component from '.';
+import MergeFocus from ".";
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<Component />, div);
-  ReactDOM.unmountComponentAtNode(div);
+// import Component from ".";
+afterEach(cleanup);
+
+it("works", () => {
+  const blur = jest.fn();
+  const focus = jest.fn();
+
+  const { getByLabelText, getByTitle, getByText } = render(
+    <form title="Form">
+      <MergeFocus onBlur={blur} onFocus={focus}>
+        {mergeFocus => (
+          <>
+            <div>
+              <label>
+                Day: <input name="day" {...mergeFocus} />
+              </label>
+            </div>
+            <div>
+              <label>
+                Month: <input name="month" {...mergeFocus} />
+              </label>
+            </div>
+            <div>
+              <label>
+                Year: <input name="year" {...mergeFocus} />
+              </label>
+            </div>
+          </>
+        )}
+      </MergeFocus>
+      <button type="button">click me</button>
+    </form>
+  );
+
+  const day = getByLabelText("Day:");
+  const month = getByLabelText("Month:");
+  const year = getByLabelText("Year:");
+  const form = getByTitle("Form");
+  const button = getByText("click me");
+
+  userEvent.click(day);
+  userEvent.type(day, "10");
+  userEvent.click(month);
+  userEvent.type(month, "11");
+  userEvent.click(year);
+  userEvent.type(year, "12");
+
+  expect(form).toHaveFormValues({ day: "10", month: "11", year: "12" });
+  expect(focus).toHaveBeenCalledTimes(1);
+  expect(blur).toHaveBeenCalledTimes(0);
+
+  userEvent.click(button);
+
+  expect(blur).toHaveBeenCalledTimes(1);
+});
+
+it("handles refs to the same input", () => {
+  const sampleRef = "someref";
+  let mergeRef;
+  const { getByLabelText, getByTitle, getByText } = render(
+    <form title="Form">
+      <MergeFocus>
+        {({ ref, onFocus, onBlur }) => {
+          mergeRef = ref;
+          return null;
+        }}
+      </MergeFocus>
+      <button type="button">click me</button>
+    </form>
+  );
+  mergeRef(sampleRef);
+  mergeRef(sampleRef);
 });
