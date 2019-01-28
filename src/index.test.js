@@ -60,3 +60,5 @@ it("works", () => {
 
   expect(blur).toHaveBeenCalledTimes(1);
 });
+
+// TODO: merge onBlur onFocus and ref functions with existing usage

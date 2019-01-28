@@ -8,7 +8,7 @@ type Props = {
 
 class MergeFocus extends React.Component<Props> {
   state = {
-    inputs: []
+    elements: []
   };
 
   static defaultProps = {
@@ -16,8 +16,9 @@ class MergeFocus extends React.Component<Props> {
     onBlur: undefined
   };
 
-  isTracked(e) {
-    const { inputs } = this.state;
+  // is the given element one of the elements that we're merging
+  isMerged(element) {
+    const { elements } = this.state;
     // we could traverse up the DOM as per https://stackoverflow.com/a/38019906/1582783
     // or maybe if thisComponentRef.contains(e.relatedTarget)
     // but this wouldn't work e.g with portals
@@ -29,29 +30,25 @@ class MergeFocus extends React.Component<Props> {
     // Could the context api be used to detect child-of?
     // if we could 'get react component associated with this event' then there may be an option but that feels like an anti pattern
     // ^^ think about this anti pattern and why!
-    // console.log(this.state.inputs);
+    // console.log(this.state.elements);
     // console.log(e.relatedTarget);
-    return inputs.indexOf(e.relatedTarget) !== -1;
+    return elements.indexOf(element) !== -1;
     // e.currentTarget.contains(e.relatedTarget)
   }
 
   handleFocusChange(e) {
     const { onFocus } = this.props;
     // Don't focus if e.relatedTarget (where the user came from) is included in group
-    // console.log('handleFocusChange');
-    // console.log(e);
-    // console.log(e.relatedTarget);
-    // console.log(this.isTracked(e));
-    if (!this.isTracked(e)) {
-      !!onFocus && onFocus();
+    if (!this.isMerged(e.relatedTarget)) {
+      !!onFocus && onFocus(e);
     }
   }
 
   handleBlurChange(e) {
     const { onBlur } = this.props;
     // Don't blur if e.relatedTarget (where the user is moving to) is included in group
-    if (!this.isTracked(e)) {
-      !!onBlur && onBlur();
+    if (!this.isMerged(e.relatedTarget)) {
+      !!onBlur && onBlur(e);
     }
   }
 
@@ -59,9 +56,9 @@ class MergeFocus extends React.Component<Props> {
     // TODO: how to handle refs being removed? Need a unit test
     input &&
       this.setState(prevState =>
-        prevState.inputs.indexOf(input) === -1
+        prevState.elements.indexOf(input) === -1
           ? {
-              inputs: prevState.inputs.concat([input])
+              elements: prevState.elements.concat([input])
             }
           : null
       );
