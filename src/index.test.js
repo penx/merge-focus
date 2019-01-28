@@ -62,21 +62,3 @@ it("works", () => {
 
   expect(blur).toHaveBeenCalledTimes(1);
 });
-
-it("handles refs to the same input", () => {
-  const sampleRef = "someref";
-  let mergeRef;
-  const { getByLabelText, getByTitle, getByText } = render(
-    <form title="Form">
-      <MergeFocus>
-        {({ ref, onFocus, onBlur }) => {
-          mergeRef = ref;
-          return null;
-        }}
-      </MergeFocus>
-      <button type="button">click me</button>
-    </form>
-  );
-  mergeRef(sampleRef);
-  mergeRef(sampleRef);
-});

@@ -60,16 +60,15 @@ class MergeFocus extends React.Component<Props> {
   }
 
   handleRef(input) {
-    const { inputs } = this.state;
     // TODO: how to handle refs being removed? Need a unit test
-    if (!!input && inputs.indexOf(input) === -1) {
-      this.setState(prevState => ({
-        inputs:
-          prevState.inputs.indexOf(input) === -1
-            ? prevState.inputs.concat([input])
-            : prevState.inputs
-      }));
-    }
+    input &&
+      this.setState(prevState =>
+        prevState.inputs.indexOf(input) === -1
+          ? {
+              inputs: prevState.inputs.concat([input])
+            }
+          : null
+      );
   }
 
   render() {
