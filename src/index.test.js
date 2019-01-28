@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
-// import ReactDOM from "react-dom";
 import { render, cleanup } from "react-testing-library";
 import userEvent from "user-event";
 import "jest-dom/extend-expect";
 
 import MergeFocus from ".";
 
-// import Component from ".";
 afterEach(cleanup);
 
 it("works", () => {

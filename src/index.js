@@ -50,10 +50,6 @@ class MergeFocus extends React.Component<Props> {
   handleBlurChange(e) {
     const { onBlur } = this.props;
     // Don't blur if e.relatedTarget (where the user is moving to) is included in group
-    // console.log('handleBlurChange');
-    // console.log(e);
-    // console.log(e.relatedTarget);
-    // console.log(this.isTracked(e));
     if (!this.isTracked(e)) {
       !!onBlur && onBlur();
     }
