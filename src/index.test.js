@@ -146,16 +146,13 @@ it("handles refs being removed", () => {
 
   userEvent.click(hideMonth);
 
-  // TODO: does this ensure month doesn't exiset? Check toHaveFormValues spec
   expect(form).toHaveFormValues({ day: "10", year: "12" });
   expect(form).not.toHaveFormValues({ month: "11" });
 
   userEvent.click(day);
   userEvent.type(day, "20");
 
-  // debugOn = true;
   userEvent.click(year);
-  // debugOn = false;
 
   userEvent.type(year, "22");
 

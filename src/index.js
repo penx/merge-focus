@@ -57,7 +57,6 @@ class MergeFocus extends React.Component<Props> {
   }
 
   handleRef(key, element) {
-    // TODO: Need a unit test for refs being removed
     if (element) {
       this.elements[key] = element;
     } else {
