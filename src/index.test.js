@@ -167,6 +167,8 @@ it("handles refs being removed", () => {
   userEvent.click(button);
 
   expect(blur).toHaveBeenCalledTimes(2);
+
+  // TODO: can we check that refs have actually been removed? Maybe MergeFocus should have a refs prop that accepts a function?
 });
 
 // TODO: merge onBlur onFocus and ref functions with existing usage
