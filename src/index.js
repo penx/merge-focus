@@ -8,15 +8,22 @@ type Props = {
 };
 
 class MergeFocus extends React.Component<Props> {
-  // we don't need to rerender when we get new refs, so no need to store in state
-  // (in fact, triggering a rerender causes an infinite loop)
-  elements = {};
-
   static defaultProps = {
     keys: [],
     onFocus: undefined,
     onBlur: undefined
   };
+
+  constructor(props) {
+    super();
+    this.elementRefs = props.keys.reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: React.createRef()
+      }),
+      {}
+    );
+  }
 
   // is the given element one of the elements that we're merging
   isMerged(element) {
@@ -33,10 +40,8 @@ class MergeFocus extends React.Component<Props> {
     // ^^ think about this anti pattern and why!
     // if it was the component in question we could pass down onBlur/onChange, however it's the target of a blur event that we need to check against to prevent it from firing, so we don't know what this is until the user causes a blur - and even then we only have a DOM reference to it
     // if we passed refs using createRef rather than a function then we could use ref.current
-    // TODO: consider refactoring to use createRef
-    // https://reactjs.org/docs/refs-and-the-dom.html
-    return Object.keys(this.elements).some(
-      key => this.elements[key] === element
+    return Object.keys(this.elementRefs).some(
+      key => this.elementRefs[key].current === element
     );
   }
 
@@ -56,14 +61,6 @@ class MergeFocus extends React.Component<Props> {
     }
   }
 
-  handleRef(key, element) {
-    if (element) {
-      this.elements[key] = element;
-    } else {
-      delete this.elements[key];
-    }
-  }
-
   render() {
     const { children, keys } = this.props;
 
@@ -72,7 +69,7 @@ class MergeFocus extends React.Component<Props> {
         [key]: {
           onFocus: e => this.handleFocusChange(key, e),
           onBlur: e => this.handleBlurChange(key, e),
-          ref: input => this.handleRef(key, input)
+          ref: this.elementRefs[key]
         },
         ...acc
       }),
