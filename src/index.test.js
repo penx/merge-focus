@@ -8,7 +8,7 @@ import MergeFocus from ".";
 
 afterEach(cleanup);
 
-it("merges focus and blur events", () => {
+it("merges input focus and blur events", () => {
   const blur = jest.fn();
   const focus = jest.fn();
 
@@ -169,3 +169,64 @@ it("handles refs being removed", () => {
 });
 
 // TODO: merge onBlur onFocus and ref functions with existing usage
+
+it("merges radio focus and blur events", () => {
+  const blur = jest.fn();
+  const focus = jest.fn();
+
+  const { getByLabelText, getByTitle, getByText } = render(
+    <form title="Form">
+      <MergeFocus keys={["yes", "no", "maybe"]} onBlur={blur} onFocus={focus}>
+        {inputs => (
+          <>
+            <div>
+              <label>
+                Yes:
+                <input name="answer" value="yes" type="radio" {...inputs.yes} />
+              </label>
+            </div>
+            <div>
+              <label>
+                No:
+                <input name="answer" value="no" type="radio" {...inputs.no} />
+              </label>
+            </div>
+            <div>
+              <label>
+                Maybe:
+                <input
+                  name="answer"
+                  value="maybe"
+                  type="radio"
+                  {...inputs.maybe}
+                />
+              </label>
+            </div>
+          </>
+        )}
+      </MergeFocus>
+      <button type="button">click me</button>
+    </form>
+  );
+
+  const yes = getByLabelText("Yes:");
+  const no = getByLabelText("No:");
+  const maybe = getByLabelText("Maybe:");
+  const form = getByTitle("Form");
+  const button = getByText("click me");
+
+  expect(focus).toHaveBeenCalledTimes(0);
+
+  userEvent.click(yes);
+  userEvent.click(maybe);
+  userEvent.click(no);
+
+  expect(form).toHaveFormValues({ answer: "no" });
+
+  expect(focus).toHaveBeenCalledTimes(1);
+  expect(blur).toHaveBeenCalledTimes(0);
+
+  userEvent.click(button);
+
+  expect(blur).toHaveBeenCalledTimes(1);
+});
