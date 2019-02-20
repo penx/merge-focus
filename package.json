@@ -1,6 +1,6 @@
 {
   "name": "merge-focus",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A React component that merges the onFocus and onBlur events of a set of inputs.",
   "main": "lib/index.js",
   "module": "es/index.js",
